@@ -1,0 +1,81 @@
+<!doctype html>
+
+<!--[if lt IE 7 ]> <html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"><!--<![endif]-->
+
+  
+  <head data-hook="inside_head">
+    <%= render :partial => 'spree/shared/head' %>
+    <link rel="stylesheet" type="text/css" href="http://chaiknet.ru/sonem/templates/site/css/main.css">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.getJSON('http://chaiknet.ru/love?json&callback=?',
+
+                    function(data) {
+                        $('#head_banner').html(data.h_banner);
+                        $('#dol').text('$ '+data.usd);
+                        $('#eur').text('€ '+data.eur);
+                        $('.fact').text(data.weather_tf);
+                        $('#morrow').text(data.weather_tm);
+                        $('#weacher_ta').text(data.weather_ta);
+                        $('#weacher-type').text(data.weather_word);
+                        $('#soon_title').text(data.soon_title);
+                        $('#soon_value').text(data.soon_value);
+                        $('#w_img').attr('src','http://chaiknet.ru/sonem/templates/site/images/weather/fact/'+data.weather_code+'.jpg');
+                    });
+
+        });
+    </script>
+  </head>
+
+  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body">
+
+  <%= render :partial => 'spree/shared/chaiknet_head' %>
+  <div class="container">
+
+      <header id="header" class="row" data-hook>
+
+
+        <nav id="top-nav-bar" class="columns omega ten">
+          <ul id="nav-bar" class="inline" data-hook>
+            <%= render :partial => 'spree/shared/nav_bar' %>
+          </ul>
+        </nav>
+
+        <% if store_menu? %>
+          <nav class="columns alpha omega sixteen">
+            <ul id="main-nav-bar" class="inline" data-hook>            
+              <%= render :partial => 'spree/shared/store_menu' %>
+            </ul>
+          </nav>
+        <% end %>
+            
+      </header>
+
+      <div id="wrapper" class="row" data-hook>
+        
+        <% if content_for?(:sidebar) %>
+          <aside id="sidebar" class="columns alpha four" data-hook>
+            <%= yield :sidebar %>
+          </aside>
+        <% end %>
+
+        <div id="content" class="columns omega <% if !content_for?(:sidebar) %> sixteen alpha <% else %> twelve <% end %>" data-hook>
+          <%= breadcrumbs(@taxon) %>
+          <%= flash_messages %>
+          <%= yield %>
+        </div>
+
+      </div>
+
+
+    </div>
+  <%= render :partial => 'spree/shared/chaiknet_footer' %>
+  <%= render :partial => 'spree/shared/google_analytics' %>
+
+  </body>
+
+</html>
